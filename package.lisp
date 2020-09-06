@@ -1,5 +1,9 @@
 (defpackage :weird-pointers
-  (:use :cl :bordeaux-threads :cffi))
+  (:use :cl :bordeaux-threads :cffi)
+  (:export
+   #:save
+   #:restore
+   #:free))
 
 (in-package :weird-pointers)
 
