@@ -14,7 +14,8 @@
   (when v
     (let ((p (cffi:foreign-alloc :int)))
       (bordeaux-threads:with-lock-held (lock)
-        (setf (gethash p store) v)))))
+        (setf (gethash p store) v))
+      p)))
 
 (defun restore (p)
   (when p
