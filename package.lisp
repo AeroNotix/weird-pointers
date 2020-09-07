@@ -9,21 +9,25 @@
 
 (defparameter lock (bordeaux-threads:make-lock))
 (defparameter store (make-hash-table))
+#+(or cmu scl)
+(defparameter ptr-int #'sys:sap-int)
+#+(or sbcl)
+(defparameter ptr-int #'sb-sys:sap-int)
 
 (defun save (v)
   (when v
     (let ((p (cffi:foreign-alloc :int)))
       (bordeaux-threads:with-lock-held (lock)
-        (setf (gethash (sb-sys:sap-int p) store) v))
+        (setf (gethash (funcall ptr-int p) store) v))
       p)))
 
 (defun restore (p)
   (when p
     (bordeaux-threads:with-lock-held (lock)
-      (gethash (sb-sys:sap-int p) store))))
+      (gethash (funcall ptr-int p) store))))
 
 (defun free (p)
   (when p
     (bordeaux-threads:with-lock-held (lock)
-      (remhash (sb-sys:sap-int p) store)
+      (remhash (funcall ptr-int p) store)
       (cffi:foreign-free p))))
