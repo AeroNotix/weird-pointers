@@ -17,6 +17,9 @@ being a function itself, just use save/restore on the pointer from this library.
 
 (let ((context (weird-pointers:save (lambda () (format t "Hi!~%")))))
  (foreign-funcall-pointer (callback some-c-fun) () :pointer context))
+
+=> Hi!
+; No value
 ```
 
 The reason why we don't pass a pointer to the Lisp context directly is that the
