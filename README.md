@@ -11,10 +11,15 @@ Now it's super easy to pass a Lisp function to the C function with the context
 being a function itself, just use save/restore on the pointer from this library.
 
 ```lisp
-(defcfun some-c-fun :void ((context :pointer))
+(defcallback some-c-fun :void ((context :pointer))
  (let ((f (weird-pointers:restore context)))
   (funcall f)))
 
 (let ((context (weird-pointers:save (lambda () (format t "Hi!~%")))))
-  (some-c-fun context))
+ (foreign-funcall-pointer (callback some-c-fun) () :pointer context))
 ```
+
+The reason why we don't pass a pointer to the Lisp context directly is that the
+garbage collector is free to move things around as it sees fit. It's much
+simpler to store a reference to the object and allow the GC to update pointers
+to it, rather than to try to do that ourselves.
