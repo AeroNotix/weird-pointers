@@ -14,16 +14,16 @@
   (when v
     (let ((p (cffi:foreign-alloc :int)))
       (bordeaux-threads:with-lock-held (lock)
-        (setf (gethash p store) v))
+        (setf (gethash (sb-sys:sap-int p) store) v))
       p)))
 
 (defun restore (p)
   (when p
     (bordeaux-threads:with-lock-held (lock)
-      (gethash p store))))
+      (gethash (sb-sys:sap-int p) store))))
 
 (defun free (p)
   (when p
     (bordeaux-threads:with-lock-held (lock)
-      (remhash p store)
+      (remhash (sb-sys:sap-int p) store)
       (cffi:foreign-free p))))
