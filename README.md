@@ -15,6 +15,6 @@ being a function itself, just use save/restore on the pointer from this library.
  (let ((f (weird-pointers:restore context)))
   (funcall f)))
 
-(let ((context (weird-pointers:save (lambda () (format t "Hi!~%)))))
+(let ((context (weird-pointers:save (lambda () (format t "Hi!~%")))))
   (some-c-fun context))
 ```
