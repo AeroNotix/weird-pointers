@@ -1,5 +1,6 @@
 (defpackage :weird-pointers
   (:use :cl :bordeaux-threads :cffi)
+  (:nicknames :wp)
   (:export
    #:save
    #:restore
